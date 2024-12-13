@@ -9,8 +9,8 @@ import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
 import javax.inject.Inject
 
 class SudokuGeneratorImpl @Inject constructor(
-    val sudokuValidityChecker: SudokuValidityChecker
-): SudokuGenerator {
+    private val sudokuValidityChecker: SudokuValidityChecker
+) : SudokuGenerator {
 
     override fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField {
         val filledCells = when (difficulty) {
@@ -19,7 +19,10 @@ class SudokuGeneratorImpl @Inject constructor(
             DifficultyLevel.HARD -> 25
         }
 
-        val field = Array(81) { SudokuNode(null, SudokuNodeType.Unfilled) }
+        // Инициализация пустого поля 9x9
+        val field = Array(9) {
+            Array(9) { SudokuNode(null, SudokuNodeType.Unfilled) }
+        }
 
         var filledCount = 0
         while (filledCount < filledCells) {
@@ -27,9 +30,8 @@ class SudokuGeneratorImpl @Inject constructor(
             val col = (0..8).random()
             val value = (1..9).random()
 
-            val index = row * 9 + col
-            if (field[index].value == null && sudokuValidityChecker.isValidMove(field, row, col, value)) {
-                field[index] = SudokuNode(value, SudokuNodeType.Initial)
+            if (field[row][col].value == null && sudokuValidityChecker.isValidMove(field, row, col, value)) {
+                field[row][col] = SudokuNode(value, SudokuNodeType.Initial)
                 filledCount++
             }
         }
