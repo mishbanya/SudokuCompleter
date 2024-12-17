@@ -19,7 +19,6 @@ class SudokuGeneratorImpl @Inject constructor(
             DifficultyLevel.HARD -> 25
         }
 
-        // Инициализация пустого поля 9x9
         val field = Array(9) {
             Array(9) { SudokuNode(null, SudokuNodeType.Unfilled) }
         }
