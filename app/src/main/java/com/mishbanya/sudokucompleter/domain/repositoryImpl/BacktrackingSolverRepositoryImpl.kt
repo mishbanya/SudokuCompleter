@@ -1,9 +1,9 @@
 package com.mishbanya.sudokucompleter.domain.repositoryImpl
 
+import com.mishbanya.sudokucompleter.data.CONSTANTS.UPDATE_COOLDOWN
 import com.mishbanya.sudokucompleter.data.SudokuField
 import com.mishbanya.sudokucompleter.data.SudokuNode
 import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.data.UPDATE_COOLDOWN
 import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolverRepository
 import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
 import kotlinx.coroutines.delay
@@ -14,9 +14,7 @@ class BacktrackingSolverRepositoryImpl @Inject constructor(
 ): BacktrackingSolverRepository {
 
     override suspend fun solve(field: SudokuField, onUpdate: (SudokuField) -> Unit): Boolean {
-            val newField = field.copy()
-
-            return solveRecursively(newField, onUpdate)
+            return solveRecursively(field.deepCopy(), onUpdate)
     }
 
     private suspend fun solveRecursively(
@@ -36,7 +34,7 @@ class BacktrackingSolverRepositoryImpl @Inject constructor(
         for (num in 1..9) {
             if (validityChecker.isValidMove(field.field, row, col, num)) {
                 field.setNode(row, col, SudokuNode(num, SudokuNodeType.Filled))
-                onUpdate(field.copy())
+                onUpdate(field.deepCopy())
                 delay(UPDATE_COOLDOWN)
 
                 if (solveRecursively(field, onUpdate, nextRow, nextCol)) {
@@ -44,11 +42,12 @@ class BacktrackingSolverRepositoryImpl @Inject constructor(
                 }
 
                 field.setNode(row, col, SudokuNode(null, SudokuNodeType.Unfilled))
-                onUpdate(field.copy())
+                onUpdate(field.deepCopy())
                 delay(UPDATE_COOLDOWN)
             }
         }
 
         return false
     }
+
 }

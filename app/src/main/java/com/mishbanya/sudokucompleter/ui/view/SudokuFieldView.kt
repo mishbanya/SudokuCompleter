@@ -31,6 +31,7 @@ fun SudokuFieldView(
     sudokuField: SudokuField,
     modifier: Modifier = Modifier
 ) {
+    Text("Текущий уровень сложности: ${sudokuField.difficultyLevel}")
     sudokuField.field.forEachIndexed { index, row ->
         SudokuRowView(row, index, modifier.padding(vertical = 2.dp))
     }

@@ -1,3 +1,5 @@
 package com.mishbanya.sudokucompleter.data
 
-const val UPDATE_COOLDOWN = 30L
+object CONSTANTS {
+    const val UPDATE_COOLDOWN = 1L
+}
