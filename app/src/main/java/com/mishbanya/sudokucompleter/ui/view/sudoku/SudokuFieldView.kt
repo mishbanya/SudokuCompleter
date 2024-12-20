@@ -64,7 +64,7 @@ fun SudokuRowView(
                 onChanged = {
                     onChanged(index, it)
                 },
-                modifier = modifier.padding(vertical = 2.dp))
+                modifier = modifier.padding(horizontal = 2.dp))
         }
     }
     if(index==2 || index==5){
