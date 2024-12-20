@@ -29,11 +29,18 @@ import com.mishbanya.sudokucompleter.data.SudokuNodeType
 @Composable
 fun SudokuFieldView(
     sudokuField: SudokuField,
+    onChanged: (row: Int, col: Int, value: Int) -> Unit = {_,_,_ ->},
     modifier: Modifier = Modifier
 ) {
     Text("Текущий уровень сложности: ${sudokuField.difficultyLevel}")
     sudokuField.field.forEachIndexed { index, row ->
-        SudokuRowView(row, index, modifier.padding(vertical = 2.dp))
+        SudokuRowView(
+            row = row,
+            index = index,
+            onChanged = {col, it ->
+                onChanged(index, col, it)
+            },
+            modifier = modifier.padding(vertical = 2.dp))
     }
 }
 
@@ -41,6 +48,7 @@ fun SudokuFieldView(
 fun SudokuRowView(
     row: Array<SudokuNode>,
     index: Int,
+    onChanged: (col: Int, value: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -50,7 +58,13 @@ fun SudokuRowView(
         horizontalArrangement = Arrangement.Center
     ) {
         row.forEachIndexed { index, cell ->
-            SudokuCellView(cell, index, Modifier.padding(horizontal = 2.dp))
+            SudokuCellView(
+                cell = cell,
+                index = index,
+                onChanged = {
+                    onChanged(index, it)
+                },
+                modifier = modifier.padding(vertical = 2.dp))
         }
     }
     if(index==2 || index==5){
@@ -62,6 +76,7 @@ fun SudokuRowView(
 fun SudokuCellView(
     cell: SudokuNode,
     index: Int,
+    onChanged: (value: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(

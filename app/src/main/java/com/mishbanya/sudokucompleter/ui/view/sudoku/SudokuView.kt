@@ -75,7 +75,13 @@ fun SudokuView(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            SudokuFieldView(field.value!!, modifier)
+            SudokuFieldView(
+                sudokuField = field.value!!,
+//                onChanged = {
+//
+//                },
+                modifier = modifier
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 

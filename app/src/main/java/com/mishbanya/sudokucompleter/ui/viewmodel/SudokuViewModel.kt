@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mishbanya.sudokucompleter.data.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.SudokuField
+import com.mishbanya.sudokucompleter.data.SudokuNode
+import com.mishbanya.sudokucompleter.data.SudokuNodeType
 import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolverRepository
+import com.mishbanya.sudokucompleter.domain.repository.NodeSetterRepository
 import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SudokuViewModel @Inject constructor(
     private val sudokuGenerator: SudokuGenerator,
+    private val nodeSetter: NodeSetterRepository,
     private val backtrackingSolverRepository: BacktrackingSolverRepository
 ): ViewModel() {
 
@@ -34,9 +37,18 @@ class SudokuViewModel @Inject constructor(
     }
 
     fun generateSudoku() {
-        viewModelScope.launch {
-            _field.emit(sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value))
-        }
+        _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
+    }
+
+    fun setNode(
+        row: Int,
+        col: Int,
+        value: Int?
+    ): Boolean {
+        nodeSetter.setNode(_field.value!!, row, col, value)?.let {
+            _field.value = it
+            return true
+        } ?: return false
     }
 
     fun solveSudoku(
