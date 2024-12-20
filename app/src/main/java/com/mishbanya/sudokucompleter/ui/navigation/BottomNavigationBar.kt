@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,9 +21,9 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BottomNavigationBar(navController: NavController = rememberNavController()) {
+
     BottomNavigation(
-        backgroundColor = MaterialTheme.colors.surface,
-        contentColor = MaterialTheme.colors.onSurface
+        backgroundColor = MaterialTheme.colorScheme.background
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -38,7 +37,7 @@ fun BottomNavigationBar(navController: NavController = rememberNavController()) 
                         painter = painterResource(id = screen.icon),
                         contentDescription = screen.title,
                         modifier = Modifier.size(24.dp),
-                        tint = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
+                        tint = MaterialTheme.colorScheme.surface
                     )
                 },
                 selected = isSelected,
@@ -48,11 +47,9 @@ fun BottomNavigationBar(navController: NavController = rememberNavController()) 
                         launchSingleTop = true
                     }
                 },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                 modifier = Modifier
-                    .background(if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.1f) else MaterialTheme.colors.surface)
-                    .border(BorderStroke(1.dp, Color.Black))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .border(BorderStroke(if(isSelected) 1.dp else 0.dp, if(isSelected) Color.Yellow else Color.Black))
             )
         }
     }

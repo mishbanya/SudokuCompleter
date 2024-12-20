@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.ui.view
+package com.mishbanya.sudokucompleter.ui.view.sudoku
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
