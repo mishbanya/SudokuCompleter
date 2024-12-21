@@ -66,10 +66,13 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.material3.android)
+    implementation("androidx.compose.material:material:1.5.0")
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("com.materialkolor:material-kolor:2.0.0")
+    implementation("androidx.navigation:navigation-compose:2.5.0")
 
     // Hilt core
     implementation("com.google.dagger:hilt-android:2.47")
