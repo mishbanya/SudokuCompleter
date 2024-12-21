@@ -77,9 +77,7 @@ fun SudokuView(
 
             SudokuFieldView(
                 sudokuField = field.value!!,
-//                onChanged = {
-//
-//                },
+                sudokuViewModel = sudokuViewModel,
                 modifier = modifier
             )
 

@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 enum class SudokuNodeType {
     Initial,
     Filled,
+    FilledManually,
     Unfilled
 }

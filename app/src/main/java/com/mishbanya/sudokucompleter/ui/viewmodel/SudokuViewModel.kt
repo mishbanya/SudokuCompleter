@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mishbanya.sudokucompleter.data.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolverRepository
-import com.mishbanya.sudokucompleter.domain.repository.NodeSetterRepository
+import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.repository.NodeSetter
+import com.mishbanya.sudokucompleter.domain.repository.SolvedObserver
 import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,9 +20,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SudokuViewModel @Inject constructor(
     private val sudokuGenerator: SudokuGenerator,
-    private val nodeSetter: NodeSetterRepository,
-    private val backtrackingSolverRepository: BacktrackingSolverRepository
+    private val nodeSetter: NodeSetter,
+    private val backtrackingSolver: BacktrackingSolver,
+    private val solvedObserver: SolvedObserver
 ): ViewModel() {
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var _field : MutableStateFlow<SudokuField?> = MutableStateFlow(null)
     val field: StateFlow<SudokuField?>
@@ -32,12 +35,17 @@ class SudokuViewModel @Inject constructor(
     val difficulty: StateFlow<DifficultyLevel>
         get() = _difficulty.asStateFlow()
 
+    private var _isSolvedField : MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isSolvedField: StateFlow<Boolean>
+        get() = _isSolvedField.asStateFlow()
+
     fun setDifficulty(difficulty: DifficultyLevel){
         _difficulty.value = difficulty
     }
 
     fun generateSudoku() {
         _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
+        _isSolvedField.value = false
     }
 
     fun setNode(
@@ -47,23 +55,27 @@ class SudokuViewModel @Inject constructor(
     ): Boolean {
         nodeSetter.setNode(_field.value!!, row, col, value)?.let {
             _field.value = it
+            solvedObserver.checkSolvedState(_field.value!!)
             return true
-        } ?: return false
+        }
+        return false
     }
 
     fun solveSudoku(
         onSolved: (Boolean) -> Unit
     ) {
-        viewModelScope.launch {
+        scope.launch {
             val result = _field.value?.let { initField ->
-                backtrackingSolverRepository.solve(
+                backtrackingSolver.solve(
                     field = initField,
                     onUpdate = { updatedField ->
                         viewModelScope.launch { _field.value = updatedField }
-                    }
+                    },
+                    cooldown = 1
                 )
             }
             onSolved(result ?: false)
+            _isSolvedField.value = result ?: false
         }
     }
 }
