@@ -29,10 +29,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
 import com.mishbanya.sudokucompleter.ui.theme.DeepBlue
+import com.mishbanya.sudokucompleter.ui.theme.SoftPink
 import com.mishbanya.sudokucompleter.ui.theme.Teal
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
@@ -122,7 +123,7 @@ fun SudokuCellView(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isSolved.value)
-                    Color.Magenta
+                    SoftPink
                 else {
                     when(cell.flag){
                         SudokuNodeType.Filled -> DeepBlue

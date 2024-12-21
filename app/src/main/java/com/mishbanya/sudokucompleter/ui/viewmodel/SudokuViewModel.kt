@@ -2,12 +2,12 @@ package com.mishbanya.sudokucompleter.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mishbanya.sudokucompleter.data.DifficultyLevel
-import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolver
-import com.mishbanya.sudokucompleter.domain.repository.NodeSetter
-import com.mishbanya.sudokucompleter.domain.repository.SolvedObserver
-import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

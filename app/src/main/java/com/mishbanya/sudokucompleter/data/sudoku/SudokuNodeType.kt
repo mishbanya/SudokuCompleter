@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.data
+package com.mishbanya.sudokucompleter.data.sudoku
 
 import kotlinx.serialization.Serializable
 

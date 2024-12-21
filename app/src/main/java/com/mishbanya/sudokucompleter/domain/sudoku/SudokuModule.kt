@@ -1,20 +1,20 @@
-package com.mishbanya.sudokucompleter.domain
+package com.mishbanya.sudokucompleter.domain.sudoku
 
 import android.util.Log
-import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolver
-import com.mishbanya.sudokucompleter.domain.repository.NodeSetter
-import com.mishbanya.sudokucompleter.domain.repository.SolvedObserver
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.BacktrackingSolverImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.NodeSetterImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.SolvedObserverImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.SudokuGeneratorImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.SudokuValidityCheckerImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.BacktrackingSolverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.NodeSetterImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SolvedObserverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuGeneratorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuValidityCheckerImpl
 import javax.inject.Singleton
 
 @Module

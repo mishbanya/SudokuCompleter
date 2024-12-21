@@ -1,11 +1,11 @@
-package com.mishbanya.sudokucompleter.domain.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
 
-import com.mishbanya.sudokucompleter.data.DifficultyLevel
-import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
 import javax.inject.Inject
 
 class SudokuGeneratorImpl @Inject constructor(

@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("plugin.serialization") version "2.1.0"
     kotlin("kapt") // Для аннотаций Hilt
     id("dagger.hilt.android.plugin") // Плагин Hilt
+    kotlin("plugin.serialization") version "2.1.0"
 }
 
 android {
