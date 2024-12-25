@@ -6,17 +6,20 @@ import com.mishbanya.sudokucompleter.data.SudokuNode
 import com.mishbanya.sudokucompleter.data.SudokuNodeType
 import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
 import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.repository.UniqueSolutionValidator
 import javax.inject.Inject
+import kotlin.random.Random
 
 class SudokuGeneratorImpl @Inject constructor(
-    private val sudokuValidityChecker: SudokuValidityChecker
+    private val sudokuValidityChecker: SudokuValidityChecker,
+    private val uniqueSolutionValidator: UniqueSolutionValidator
 ) : SudokuGenerator {
 
-    override fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField {
+    override suspend fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField {
         val filledCells = when (difficulty) {
             DifficultyLevel.EASY -> 40
-            DifficultyLevel.MEDIUM -> 30
-            DifficultyLevel.HARD -> 20
+            DifficultyLevel.MEDIUM -> 35
+            DifficultyLevel.HARD -> 25
         }
 
         val field = Array(9) {
@@ -41,11 +44,23 @@ class SudokuGeneratorImpl @Inject constructor(
 
         fillSudoku()
 
-        val positions = (0..80).shuffled().take(81 - filledCells)
-        for (position in positions) {
-            val row = position / 9
-            val col = position % 9
-            field[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
+        val random = Random.Default
+        var removed = 0
+
+        while (removed < (81 - filledCells)) {
+            val row = random.nextInt(0, 9)
+            val col = random.nextInt(0, 9)
+
+            if (field[row][col].value != null) {
+                val backup = field[row][col]
+                field[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
+
+                if (!uniqueSolutionValidator.hasUniqueSolution(field)) {
+                    field[row][col] = backup
+                } else {
+                    removed++
+                }
+            }
         }
 
         return SudokuField(field,difficulty)

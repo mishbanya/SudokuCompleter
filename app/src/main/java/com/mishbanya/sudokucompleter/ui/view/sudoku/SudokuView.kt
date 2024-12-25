@@ -152,7 +152,11 @@ fun SudokuGeneratorComponent(
         }
         Button(
             onClick = {
-                sudokuViewModel.generateSudoku()
+                sudokuViewModel.generateSudoku(
+                    onGenerated = {
+                        //TODO
+                    }
+                )
                 onGenerated()
             },
             modifier = Modifier.fillMaxWidth(0.5f),

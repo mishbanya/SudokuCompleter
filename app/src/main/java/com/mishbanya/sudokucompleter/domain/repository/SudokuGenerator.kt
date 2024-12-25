@@ -4,5 +4,5 @@ import com.mishbanya.sudokucompleter.data.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.SudokuField
 
 interface SudokuGenerator {
-    fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField
+    suspend fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField
 }
