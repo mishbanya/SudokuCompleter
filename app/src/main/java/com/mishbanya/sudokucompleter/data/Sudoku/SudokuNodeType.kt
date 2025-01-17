@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.data
+package com.mishbanya.sudokucompleter.data.Sudoku
 
 import kotlinx.serialization.Serializable
 
@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 enum class SudokuNodeType {
     Initial,
     Filled,
+    FilledManually,
     Unfilled
 }

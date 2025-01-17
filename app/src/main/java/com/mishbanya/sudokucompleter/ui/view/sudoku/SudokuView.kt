@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mishbanya.sudokucompleter.data.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
 @Composable
@@ -77,9 +77,7 @@ fun SudokuView(
 
             SudokuFieldView(
                 sudokuField = field.value!!,
-//                onChanged = {
-//
-//                },
+                sudokuViewModel = sudokuViewModel,
                 modifier = modifier
             )
 
@@ -152,11 +150,7 @@ fun SudokuGeneratorComponent(
         }
         Button(
             onClick = {
-                sudokuViewModel.generateSudoku(
-                    onGenerated = {
-                        //TODO
-                    }
-                )
+                sudokuViewModel.generateSudoku()
                 onGenerated()
             },
             modifier = Modifier.fillMaxWidth(0.5f),

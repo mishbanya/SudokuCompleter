@@ -1,9 +1,9 @@
-package com.mishbanya.sudokucompleter.domain.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
 
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.repository.UniqueSolutionValidator
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.UniqueSolutionValidator
 
 class UniqueSolutionValidatorImpl(
     private val sudokuValidityChecker: SudokuValidityChecker

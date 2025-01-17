@@ -1,14 +1,14 @@
-package com.mishbanya.sudokucompleter.domain.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
 
-import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.repository.NodeSetterRepository
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
 
-class NodeSetterRepositoryImpl(
+class NodeSetterImpl(
     private val sudokuValidityChecker: SudokuValidityChecker
-): NodeSetterRepository {
+): NodeSetter {
     override fun setNode(sudokuField: SudokuField, row: Int, col: Int, value: Int?): SudokuField? {
 
         if(sudokuField.getNode(row, col).flag == SudokuNodeType.Initial) return null
@@ -24,7 +24,7 @@ class NodeSetterRepositoryImpl(
             if(!sudokuValidityChecker.isValidMove(sudokuField.field, row, col, value)){
                 return null
             }
-            newField.setNode(row,col, SudokuNode(value,SudokuNodeType.Filled))
+            newField.setNode(row,col, SudokuNode(value,SudokuNodeType.FilledManually))
             return newField
         }
         return null

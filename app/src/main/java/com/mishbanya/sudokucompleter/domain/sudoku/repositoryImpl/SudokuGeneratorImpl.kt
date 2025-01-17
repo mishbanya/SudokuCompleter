@@ -1,12 +1,12 @@
-package com.mishbanya.sudokucompleter.domain.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
 
-import com.mishbanya.sudokucompleter.data.DifficultyLevel
-import com.mishbanya.sudokucompleter.data.SudokuField
-import com.mishbanya.sudokucompleter.data.SudokuNode
-import com.mishbanya.sudokucompleter.data.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.repository.UniqueSolutionValidator
+import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.UniqueSolutionValidator
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -15,7 +15,7 @@ class SudokuGeneratorImpl @Inject constructor(
     private val uniqueSolutionValidator: UniqueSolutionValidator
 ) : SudokuGenerator {
 
-    override suspend fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField {
+    override fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField {
         val filledCells = when (difficulty) {
             DifficultyLevel.EASY -> 40
             DifficultyLevel.MEDIUM -> 35

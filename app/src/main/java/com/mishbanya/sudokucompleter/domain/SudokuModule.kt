@@ -1,20 +1,22 @@
 package com.mishbanya.sudokucompleter.domain
 
 import android.util.Log
-import com.mishbanya.sudokucompleter.domain.repository.BacktrackingSolverRepository
-import com.mishbanya.sudokucompleter.domain.repository.NodeSetterRepository
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.mishbanya.sudokucompleter.domain.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.repository.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.repository.UniqueSolutionValidator
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.BacktrackingSolverRepositoryImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.NodeSetterRepositoryImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.SudokuGeneratorImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.SudokuValidityCheckerImpl
-import com.mishbanya.sudokucompleter.domain.repositoryImpl.UniqueSolutionValidatorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.sudoku.repository.UniqueSolutionValidator
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.BacktrackingSolverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.NodeSetterImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SolvedObserverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuGeneratorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuValidityCheckerImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.UniqueSolutionValidatorImpl
 import javax.inject.Singleton
 
 @Module
@@ -32,18 +34,18 @@ object SudokuModule {
     @Singleton
     fun provideBacktrakingSolver(
         sudokuValidityChecker: SudokuValidityChecker
-    ): BacktrackingSolverRepository {
+    ): BacktrackingSolver {
         Log.d("Hilt", "Creating BacktrackingSolver client instance")
-        return BacktrackingSolverRepositoryImpl(sudokuValidityChecker)
+        return BacktrackingSolverImpl(sudokuValidityChecker)
     }
 
     @Provides
     @Singleton
     fun provideNodeSetter(
         sudokuValidityChecker: SudokuValidityChecker
-    ): NodeSetterRepository {
+    ): NodeSetter {
         Log.d("Hilt", "Creating NodeSetter client instance")
-        return NodeSetterRepositoryImpl(sudokuValidityChecker)
+        return NodeSetterImpl(sudokuValidityChecker)
     }
 
     @Provides
@@ -63,5 +65,12 @@ object SudokuModule {
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
         return SudokuGeneratorImpl(sudokuValidityChecker, uniqueSolutionValidator)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSolvedObserver() : SolvedObserver {
+        Log.d("Hilt", "Creating SolvedObserver client instance")
+        return SolvedObserverImpl()
     }
 }
