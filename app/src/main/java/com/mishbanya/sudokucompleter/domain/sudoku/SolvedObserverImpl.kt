@@ -1,8 +1,7 @@
-package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku
 
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
 
 class SolvedObserverImpl: SolvedObserver {
     override fun checkSolvedState(sudokuField: SudokuField): Boolean {

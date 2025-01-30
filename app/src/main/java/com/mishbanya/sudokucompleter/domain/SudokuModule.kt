@@ -1,23 +1,30 @@
 package com.mishbanya.sudokucompleter.domain
 
 import android.util.Log
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.BacktrackingSolver
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
+import com.mishbanya.sudokucompleter.domain.sudoku.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.UniqueSolutionValidator
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.BacktrackingSolverImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.NodeSetterImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SolvedObserverImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuGeneratorImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.SudokuValidityCheckerImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl.UniqueSolutionValidatorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityChecker
+import com.mishbanya.sudokucompleter.domain.sudoku.BacktrackingSolverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetterImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidator
+import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidatorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.BaseGridGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.BaseGridGeneratorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridFuzzer
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridFuzzerImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridValidDeleter
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridValidDeleterImpl
 import javax.inject.Singleton
+import kotlin.random.Random
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,21 +57,56 @@ object SudokuModule {
 
     @Provides
     @Singleton
+    fun provideBaseGridGenerator(
+        random: Random
+    ): BaseGridGenerator {
+        Log.d("Hilt", "Creating BaseGridGenerator client instance")
+        return BaseGridGeneratorImpl(random)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGridFuzzer(
+        random: Random
+    ): GridFuzzer {
+        Log.d("Hilt", "Creating GridFuzzer client instance")
+        return GridFuzzerImpl(random)
+    }
+
+    @Provides
+    @Singleton
     fun provideUniqueSolutionValidator(
         sudokuValidityChecker: SudokuValidityChecker
     ): UniqueSolutionValidator {
-        Log.d("Hilt", "Creating UniqueSolutionValidator client instance")
+        Log.d("Hilt", "Creating SudokuValidityChecker client instance")
         return UniqueSolutionValidatorImpl(sudokuValidityChecker)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGridValidDeleter(
+        uniqueSolutionValidator: UniqueSolutionValidator,
+        random: Random
+    ): GridValidDeleter {
+        Log.d("Hilt", "Creating GridValidDeleter client instance")
+        return GridValidDeleterImpl(uniqueSolutionValidator, random)
     }
 
     @Provides
     @Singleton
     fun provideSudokuGenerator(
         sudokuValidityChecker: SudokuValidityChecker,
-        uniqueSolutionValidator: UniqueSolutionValidator
+        baseGridGenerator: BaseGridGenerator,
+        gridFuzzer: GridFuzzer,
+        gridValidDeleter: GridValidDeleter
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
-        return SudokuGeneratorImpl(sudokuValidityChecker, uniqueSolutionValidator)
+        return SudokuGeneratorImpl(
+            sudokuValidityChecker,
+            baseGridGenerator,
+            gridFuzzer,
+            gridValidDeleter
+        )
     }
 
     @Provides

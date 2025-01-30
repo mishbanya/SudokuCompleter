@@ -6,10 +6,10 @@ import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.settings.SettingsModel
 import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.BacktrackingSolver
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.NodeSetter
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SolvedObserver
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
+import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
+import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,9 +48,14 @@ class SudokuViewModel @Inject constructor(
         _difficulty.value = difficulty
     }
 
-    fun generateSudoku() {
-        _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
-        _isSolvedField.value = false
+    fun generateSudoku(
+        onGenerated: () -> Unit
+    ) {
+        scope.launch {
+            _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
+            _isSolvedField.value = false
+            onGenerated()
+        }
     }
 
     fun setNode(

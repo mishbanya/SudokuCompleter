@@ -115,6 +115,7 @@ fun SudokuGeneratorComponent(
     onGenerated: () -> Unit = {},
 ) {
     val difficultyLevel = sudokuViewModel.difficulty.collectAsState()
+    var isGenerating by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -150,11 +151,16 @@ fun SudokuGeneratorComponent(
         }
         Button(
             onClick = {
-                sudokuViewModel.generateSudoku()
-                onGenerated()
+                isGenerating = true
+                sudokuViewModel.generateSudoku(
+                    onGenerated = {
+                        isGenerating = false
+                        onGenerated()
+                    }
+                )
             },
             modifier = Modifier.fillMaxWidth(0.5f),
-            enabled = enabled
+            enabled = enabled && !isGenerating
         ) {
             Text(
                 text = "Новое судоку",

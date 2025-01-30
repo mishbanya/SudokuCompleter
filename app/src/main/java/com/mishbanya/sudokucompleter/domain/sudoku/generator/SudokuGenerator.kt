@@ -1,8 +1,8 @@
-package com.mishbanya.sudokucompleter.domain.sudoku.repository
+package com.mishbanya.sudokucompleter.domain.sudoku.generator
 
 import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
 
 interface SudokuGenerator {
-    fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField
+    suspend fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField
 }

@@ -7,11 +7,6 @@ data class SudokuField(
     val field: Array<Array<SudokuNode>>,
     val difficultyLevel: DifficultyLevel
 ) {
-    init {
-        require(field.size == 9 && field.all { it.size == 9 }) {
-            "Поле должно быть размером 9x9."
-        }
-    }
     fun getNode(row: Int, col: Int): SudokuNode {
         return field[row][col]
     }

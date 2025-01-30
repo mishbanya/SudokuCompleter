@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.domain.sudoku.repository
+package com.mishbanya.sudokucompleter.domain.sudoku
 
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
 

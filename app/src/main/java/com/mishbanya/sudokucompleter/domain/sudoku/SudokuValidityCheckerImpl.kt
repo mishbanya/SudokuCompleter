@@ -1,7 +1,6 @@
-package com.mishbanya.sudokucompleter.domain.sudoku.repositoryImpl
+package com.mishbanya.sudokucompleter.domain.sudoku
 
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
-import com.mishbanya.sudokucompleter.domain.sudoku.repository.SudokuValidityChecker
 
 class SudokuValidityCheckerImpl : SudokuValidityChecker {
     override fun isValidMove(field: Array<Array<SudokuNode>>, row: Int, col: Int, value: Int): Boolean {
