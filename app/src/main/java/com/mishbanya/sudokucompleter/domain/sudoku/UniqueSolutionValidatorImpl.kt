@@ -5,36 +5,51 @@ import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
 import kotlin.random.Random
 
 class UniqueSolutionValidatorImpl(
-    private val validityChecker: SudokuValidityChecker
-): UniqueSolutionValidator {
+    private val validityChecker: SudokuValidityChecker,
+    private val random: Random
+) : UniqueSolutionValidator {
 
-    override fun hasUniqueSolution(grid: Array<Array<SudokuNode>>, random: Random): Boolean {
+    override fun hasUniqueSolution(grid: Array<Array<SudokuNode>>): Boolean {
         var solutions = 0
+        // Создаем глубокую копию сетки для работы
+        val tempGrid = grid.deepCopy()
 
         fun solve(row: Int = 0, col: Int = 0): Boolean {
+            if (solutions > 1) return true // Прекращаем поиск при втором решении
+
             if (row == 9) {
                 solutions++
-                return solutions > 1
+                // Продолжаем поиск только если нашли первое решение
+                return solutions == 1
             }
 
             val nextRow = if (col == 8) row + 1 else row
             val nextCol = (col + 1) % 9
 
-            if (grid[row][col].value != null) return solve(nextRow, nextCol)
+            if (tempGrid[row][col].value != null) {
+                return solve(nextRow, nextCol)
+            }
 
             val numbers = (1..9).shuffled(random)
             for (num in numbers) {
-                if (validityChecker.isValidMove(grid, row, col, num)) {
-                    grid[row][col] = SudokuNode(num, SudokuNodeType.Initial)
-                    if (solve(nextRow, nextCol)) return true
-                    grid[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
+                if (validityChecker.isValidMove(tempGrid, row, col, num)) {
+                    tempGrid[row][col] = SudokuNode(num, SudokuNodeType.Filled)
+                    if (solve(nextRow, nextCol)) continue
+                    tempGrid[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
                 }
             }
-            return false
+            return solutions > 1
         }
 
         solve()
         return solutions == 1
     }
 
+    private fun Array<Array<SudokuNode>>.deepCopy(): Array<Array<SudokuNode>> {
+        return Array(size) { row ->
+            Array(this[row].size) { col ->
+                this[row][col].copy()
+            }
+        }
+    }
 }

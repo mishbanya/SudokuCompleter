@@ -76,20 +76,19 @@ object SudokuModule {
     @Provides
     @Singleton
     fun provideUniqueSolutionValidator(
-        sudokuValidityChecker: SudokuValidityChecker
+        sudokuValidityChecker: SudokuValidityChecker,
+        random: Random
     ): UniqueSolutionValidator {
         Log.d("Hilt", "Creating SudokuValidityChecker client instance")
-        return UniqueSolutionValidatorImpl(sudokuValidityChecker)
+        return UniqueSolutionValidatorImpl(sudokuValidityChecker, random)
     }
 
     @Provides
     @Singleton
     fun provideGridValidDeleter(
-        uniqueSolutionValidator: UniqueSolutionValidator,
-        random: Random
     ): GridValidDeleter {
         Log.d("Hilt", "Creating GridValidDeleter client instance")
-        return GridValidDeleterImpl(uniqueSolutionValidator, random)
+        return GridValidDeleterImpl()
     }
 
     @Provides

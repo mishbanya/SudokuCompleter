@@ -39,9 +39,8 @@ fun SudokuView(
     val sudokuViewModel: SudokuViewModel = hiltViewModel()
     val field = sudokuViewModel.field.collectAsState()
     var solvingState by remember { mutableStateOf(false) }
-    var initialState = field.value == null
 
-    if(initialState){
+    if(field.value == null){
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -49,10 +48,7 @@ fun SudokuView(
         ) {
             SudokuGeneratorComponent(
                 modifier = modifier.align(Alignment.Center),
-                sudokuViewModel = sudokuViewModel,
-                onGenerated = {
-                    initialState = false
-                }
+                sudokuViewModel = sudokuViewModel
             )
         }
     }else {
@@ -111,8 +107,7 @@ fun SudokuView(
 fun SudokuGeneratorComponent(
     sudokuViewModel: SudokuViewModel,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    onGenerated: () -> Unit = {},
+    enabled: Boolean = true
 ) {
     val difficultyLevel = sudokuViewModel.difficulty.collectAsState()
     var isGenerating by remember { mutableStateOf(false) }
@@ -155,7 +150,6 @@ fun SudokuGeneratorComponent(
                 sudokuViewModel.generateSudoku(
                     onGenerated = {
                         isGenerating = false
-                        onGenerated()
                     }
                 )
             },
