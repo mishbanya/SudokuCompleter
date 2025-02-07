@@ -17,12 +17,6 @@ import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidator
 import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidatorImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.BaseGridGenerator
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.BaseGridGeneratorImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridFuzzer
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridFuzzerImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridValidDeleter
-import com.mishbanya.sudokucompleter.domain.sudoku.generator.GridValidDeleterImpl
 import javax.inject.Singleton
 import kotlin.random.Random
 
@@ -57,24 +51,6 @@ object SudokuModule {
 
     @Provides
     @Singleton
-    fun provideBaseGridGenerator(
-        random: Random
-    ): BaseGridGenerator {
-        Log.d("Hilt", "Creating BaseGridGenerator client instance")
-        return BaseGridGeneratorImpl(random)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGridFuzzer(
-        random: Random
-    ): GridFuzzer {
-        Log.d("Hilt", "Creating GridFuzzer client instance")
-        return GridFuzzerImpl(random)
-    }
-
-    @Provides
-    @Singleton
     fun provideUniqueSolutionValidator(
         sudokuValidityChecker: SudokuValidityChecker,
         random: Random
@@ -85,26 +61,12 @@ object SudokuModule {
 
     @Provides
     @Singleton
-    fun provideGridValidDeleter(
-    ): GridValidDeleter {
-        Log.d("Hilt", "Creating GridValidDeleter client instance")
-        return GridValidDeleterImpl()
-    }
-
-    @Provides
-    @Singleton
     fun provideSudokuGenerator(
         sudokuValidityChecker: SudokuValidityChecker,
-        baseGridGenerator: BaseGridGenerator,
-        gridFuzzer: GridFuzzer,
-        gridValidDeleter: GridValidDeleter
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
         return SudokuGeneratorImpl(
             sudokuValidityChecker,
-            baseGridGenerator,
-            gridFuzzer,
-            gridValidDeleter
         )
     }
 

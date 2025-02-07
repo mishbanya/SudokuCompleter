@@ -33,3 +33,11 @@ data class SudokuField(
     }
 }
 
+
+fun Array<Array<SudokuNode>>.deepCopy(): Array<Array<SudokuNode>> {
+    return Array(size) { row ->
+        Array(this[row].size) { col ->
+            this[row][col].copy()
+        }
+    }
+}

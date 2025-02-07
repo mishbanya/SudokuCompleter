@@ -2,9 +2,11 @@ package com.mishbanya.sudokucompleter.domain.sudoku
 
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.data.Sudoku.deepCopy
+import javax.inject.Inject
 import kotlin.random.Random
 
-class UniqueSolutionValidatorImpl(
+class UniqueSolutionValidatorImpl @Inject constructor(
     private val validityChecker: SudokuValidityChecker,
     private val random: Random
 ) : UniqueSolutionValidator {
@@ -43,13 +45,5 @@ class UniqueSolutionValidatorImpl(
 
         solve()
         return solutions == 1
-    }
-
-    private fun Array<Array<SudokuNode>>.deepCopy(): Array<Array<SudokuNode>> {
-        return Array(size) { row ->
-            Array(this[row].size) { col ->
-                this[row][col].copy()
-            }
-        }
     }
 }
