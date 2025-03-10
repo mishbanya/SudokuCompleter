@@ -15,8 +15,6 @@ import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetterImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidator
-import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidatorImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolverImpl
 import javax.inject.Singleton
@@ -58,16 +56,6 @@ object SudokuModule {
     ): NodeSetter {
         Log.d("Hilt", "Creating NodeSetter client instance")
         return NodeSetterImpl(sudokuValidityChecker)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUniqueSolutionValidator(
-        sudokuValidityChecker: SudokuValidityChecker,
-        random: Random
-    ): UniqueSolutionValidator {
-        Log.d("Hilt", "Creating SudokuValidityChecker client instance")
-        return UniqueSolutionValidatorImpl(sudokuValidityChecker, random)
     }
 
     @Provides
