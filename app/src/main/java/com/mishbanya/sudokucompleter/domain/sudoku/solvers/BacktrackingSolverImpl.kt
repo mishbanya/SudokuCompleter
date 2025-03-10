@@ -1,8 +1,9 @@
-package com.mishbanya.sudokucompleter.domain.sudoku
+package com.mishbanya.sudokucompleter.domain.sudoku.solvers
 
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityChecker
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 

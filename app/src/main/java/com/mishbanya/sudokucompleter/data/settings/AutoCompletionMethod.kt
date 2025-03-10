@@ -7,5 +7,5 @@ enum class AutoCompletionMethod {
     BACKTRACKING,
     CONSTRAINT_PROPAGATION,
     HEURISTIC_BASED_SEARCH,
-    DANCING_LINKS
+    DANCING_LINKS_X
 }

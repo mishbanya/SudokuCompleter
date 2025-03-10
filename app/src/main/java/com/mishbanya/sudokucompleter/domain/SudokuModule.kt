@@ -1,7 +1,7 @@
 package com.mishbanya.sudokucompleter.domain
 
 import android.util.Log
-import com.mishbanya.sudokucompleter.domain.sudoku.BacktrackingSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
 import dagger.Module
@@ -10,13 +10,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGenerator
 import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityChecker
-import com.mishbanya.sudokucompleter.domain.sudoku.BacktrackingSolverImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetterImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidator
 import com.mishbanya.sudokucompleter.domain.sudoku.UniqueSolutionValidatorImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolverImpl
 import javax.inject.Singleton
 import kotlin.random.Random
 
@@ -42,6 +44,15 @@ object SudokuModule {
 
     @Provides
     @Singleton
+    fun provideXSolver(
+
+    ): XAlgorithmSolver {
+        Log.d("Hilt", "Creating XSolver client instance")
+        return XAlgorithmSolverImpl()
+    }
+
+    @Provides
+    @Singleton
     fun provideNodeSetter(
         sudokuValidityChecker: SudokuValidityChecker
     ): NodeSetter {
@@ -62,11 +73,11 @@ object SudokuModule {
     @Provides
     @Singleton
     fun provideSudokuGenerator(
-        sudokuValidityChecker: SudokuValidityChecker,
+        xAlgorithmSolver: XAlgorithmSolver,
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
         return SudokuGeneratorImpl(
-            sudokuValidityChecker,
+            xAlgorithmSolver,
         )
     }
 
