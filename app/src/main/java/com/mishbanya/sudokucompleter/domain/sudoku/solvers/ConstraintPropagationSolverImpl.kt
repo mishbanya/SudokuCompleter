@@ -25,29 +25,13 @@ class ConstraintPropagationSolverImpl @Inject constructor(
         }
 
         while (true) {
-            var updated = false
-
-            if (applyNakedSingles(copy, possibilities, onUpdate, cooldown)) {
-                updated = true
+            if (applyNakedSingles(copy, possibilities, onUpdate, cooldown) ||
+                applyHiddenSingles(copy, possibilities, onUpdate, cooldown) ||
+                applyNakedPairs(possibilities) ||
+                applyPointingPairs(possibilities)) {
                 continue
             }
-
-            if (applyHiddenSingles(copy, possibilities, onUpdate, cooldown)) {
-                updated = true
-                continue
-            }
-
-            if (applyNakedPairs(possibilities)) {
-                updated = true
-                continue
-            }
-
-            if (applyPointingPairs(possibilities)) {
-                updated = true
-                continue
-            }
-
-            if (!updated) break
+            break
         }
 
         return copy.field.all { row -> row.all { it.value != null } }

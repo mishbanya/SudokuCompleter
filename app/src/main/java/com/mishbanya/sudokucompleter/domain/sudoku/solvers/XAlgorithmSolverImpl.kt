@@ -12,10 +12,9 @@ class XAlgorithmSolverImpl @Inject constructor(): XAlgorithmSolver {
         onUpdate: (SudokuField) -> Unit,
         cooldown: Int
     ): Boolean {
-        val size = 9
         val grid = field.field.map { row -> row.map { it.value ?: 0 }.toIntArray() }.toTypedArray()
 
-        val (X, Y) = exactCover(size)
+        val (X, Y) = exactCover()
         for (i in grid.indices) {
             for (j in grid[i].indices) {
                 if (grid[i][j] != 0) {
@@ -34,14 +33,14 @@ class XAlgorithmSolverImpl @Inject constructor(): XAlgorithmSolver {
         } ?: false
     }
 
-    private fun exactCover(size: Int): Pair<MutableMap<Pair<String, Pair<Int, Int>>, MutableSet<Triple<Int, Int, Int>>>,
+    private fun exactCover(): Pair<MutableMap<Pair<String, Pair<Int, Int>>, MutableSet<Triple<Int, Int, Int>>>,
             MutableMap<Triple<Int, Int, Int>, List<Pair<String, Pair<Int, Int>>>>> {
         val X = mutableMapOf<Pair<String, Pair<Int, Int>>, MutableSet<Triple<Int, Int, Int>>>()
         val Y = mutableMapOf<Triple<Int, Int, Int>, List<Pair<String, Pair<Int, Int>>>>()
 
-        for (r in 0 until size) {
-            for (c in 0 until size) {
-                for (n in 1..size) {
+        for (r in 0 until 9) {
+            for (c in 0 until 9) {
+                for (n in 1..9) {
                     val b = (r / 3) * 3 + (c / 3)
                     val constraints = listOf(
                         "rc" to (r to c),

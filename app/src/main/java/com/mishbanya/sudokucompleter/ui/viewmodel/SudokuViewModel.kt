@@ -47,7 +47,7 @@ class SudokuViewModel @Inject constructor(
     val isSolvedField: StateFlow<Boolean>
         get() = _isSolvedField.asStateFlow()
 
-    private val settings = settingsGetter.getFromSharedPreferences() ?: SettingsModel()
+    val settings = settingsGetter.getFromSharedPreferences() ?: SettingsModel()
 
     fun setDifficulty(difficulty: DifficultyLevel){
         _difficulty.value = difficulty
@@ -70,7 +70,9 @@ class SudokuViewModel @Inject constructor(
     ): Boolean {
         nodeSetter.setNode(_field.value!!, row, col, value)?.let {
             _field.value = it
-            solvedObserver.checkSolvedState(_field.value!!)
+            scope.launch {
+                _isSolvedField.emit(solvedObserver.checkSolvedState(_field.value!!))
+            }
             return true
         }
         return false

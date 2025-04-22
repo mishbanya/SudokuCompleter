@@ -1,5 +1,9 @@
 package com.mishbanya.sudokucompleter.data.sudoku
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.mishbanya.sudokucompleter.R
+
 enum class DifficultyLevel {
     EASY,
     MEDIUM,
@@ -19,11 +23,12 @@ enum class DifficultyLevel {
             HARD -> 30
         }
     }
-    override fun toString(): String {
+    @Composable
+    fun toStringRes(): String {
         return when (this) {
-            EASY -> "легкий"
-            MEDIUM -> "средний"
-            HARD -> "сложный"
+            EASY -> stringResource(R.string.difficulty_easy)
+            MEDIUM -> stringResource(R.string.difficulty_normal)
+            HARD -> stringResource(R.string.difficulty_hard)
         }
     }
 }

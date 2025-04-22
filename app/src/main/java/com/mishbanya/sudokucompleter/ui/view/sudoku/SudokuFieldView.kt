@@ -23,18 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mishbanya.sudokucompleter.R
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
-import com.mishbanya.sudokucompleter.ui.theme.DeepBlue
-import com.mishbanya.sudokucompleter.ui.theme.SoftPink
-import com.mishbanya.sudokucompleter.ui.theme.Teal
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
 @Composable
@@ -44,15 +43,16 @@ fun SudokuFieldView(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    Text("Текущий уровень сложности: ${sudokuField.difficultyLevel}")
+    Text("${stringResource(R.string.difficulty)}: ${sudokuField.difficultyLevel.toStringRes()}")
     sudokuField.field.forEachIndexed { index, row ->
+        val tryAgainText = stringResource(R.string.try_again)
         SudokuRowView(
             row = row,
             index = index,
             sudokuViewModel = sudokuViewModel,
             onChanged = { col, value ->
                 if(!sudokuViewModel.setNode(index,col,value)){
-                    Toast.makeText(context, "Попробуй ещё!)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, tryAgainText, Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = modifier.padding(vertical = 2.dp)
@@ -99,6 +99,8 @@ fun SudokuCellView(
     modifier: Modifier = Modifier
 ) {
     val isSolved = sudokuViewModel.isSolvedField.collectAsState()
+    val colorSettingsModel = sudokuViewModel.settings.colorSettingsModel
+
     Box(
         modifier = modifier
             .size(35.dp)
@@ -123,11 +125,11 @@ fun SudokuCellView(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isSolved.value)
-                    SoftPink
+                    Color(colorSettingsModel.completedColor)
                 else {
                     when(cell.flag){
-                        SudokuNodeType.Filled -> DeepBlue
-                        SudokuNodeType.FilledManually -> Teal
+                        SudokuNodeType.Filled -> Color(colorSettingsModel.automaticColor)
+                        SudokuNodeType.FilledManually -> Color(colorSettingsModel.manualColor)
                         SudokuNodeType.Initial -> Color.Black
                         SudokuNodeType.Unfilled -> Color.Transparent
                     }

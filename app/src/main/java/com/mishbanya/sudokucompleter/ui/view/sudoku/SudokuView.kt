@@ -27,8 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mishbanya.sudokucompleter.R
 import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
@@ -94,7 +96,7 @@ fun SudokuView(
                 enabled = !solvingState
             ) {
                 Text(
-                    text = "Начать решение",
+                    text = stringResource(R.string.solve_sudoku),
                     color = Color.White,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -157,7 +159,7 @@ fun SudokuGeneratorComponent(
             enabled = enabled && !isGenerating
         ) {
             Text(
-                text = "Новое судоку",
+                text = stringResource(R.string.generate_sudoku),
                 color = Color.White,
                 style = MaterialTheme.typography.bodySmall
             )

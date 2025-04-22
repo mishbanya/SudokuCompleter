@@ -1,5 +1,23 @@
 <resources>
     <string name="app_name">SudokuCompleter</string>
-    <string name="title_activity_sudoku">SudokuActivity</string>
-    <string name="generate_sudoku">Сгенерировать судоку</string>
+
+    <string name="generate_sudoku">New sudoku</string>
+    <string name="solve_sudoku">Start autocompletion</string>
+    <string name="settings_cooldown">Autocompletion cooldown</string>
+    <string name="settings_method">Autocompletion method</string>
+    <string name="settings_pregeneration">Fast generation</string>
+    <string name="settings_manual_color">Color of manual solution</string>
+    <string name="settings_auto_color">Color of automatic solution</string>
+    <string name="settings_completed_color">Color of completed sudoku</string>
+    <string name="mseconds">msec</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_normal">Normal</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="try_again">Try again!</string>
+    <string name="method_backtracking">Backtracking</string>
+    <string name="method_propagation">Constraint propagation</string>
+    <string name="method_x">X-Algorithm</string>
+    <string name="settings_save">Save</string>
+
 </resources>

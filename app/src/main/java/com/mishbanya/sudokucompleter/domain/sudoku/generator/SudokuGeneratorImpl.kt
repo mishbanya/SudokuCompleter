@@ -5,14 +5,14 @@ import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
 import com.mishbanya.sudokucompleter.data.sudoku.deepCopy
-import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SudokuGeneratorImpl @Inject constructor(
-    private val xAlgorithmSolver: XAlgorithmSolver
+    private val constraintPropagationSolver: ConstraintPropagationSolver
 ) : SudokuGenerator {
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -60,7 +60,7 @@ class SudokuGeneratorImpl @Inject constructor(
     }
 
     private suspend fun hasUniqueSolution(field: Array<Array<SudokuNode>>): Boolean {
-        return xAlgorithmSolver.solve(
+        return constraintPropagationSolver.solve(
             SudokuField(field, DifficultyLevel.MEDIUM),
             {},
             0

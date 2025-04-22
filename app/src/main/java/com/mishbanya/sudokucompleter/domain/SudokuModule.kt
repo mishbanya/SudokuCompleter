@@ -72,11 +72,11 @@ object SudokuModule {
     @Provides
     @Singleton
     fun provideSudokuGenerator(
-        xAlgorithmSolver: XAlgorithmSolver,
+        constraintPropagationSolver: ConstraintPropagationSolver,
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
         return SudokuGeneratorImpl(
-            xAlgorithmSolver,
+            constraintPropagationSolver,
         )
     }
 

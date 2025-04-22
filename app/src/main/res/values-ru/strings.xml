@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Решатель судоку</string>
+    <string name="generate_sudoku">Новое судоку</string>
+    <string name="solve_sudoku">Начать решение</string>
+    <string name="settings_cooldown">Задержка автоматического решения</string>
+    <string name="settings_method">Метод автоматического решения</string>
+    <string name="settings_pregeneration">Быстрая генерация</string>
+    <string name="settings_manual_color">Цвет решения пользователя</string>
+    <string name="settings_auto_color">Цвет автоматического решения</string>
+    <string name="settings_completed_color">Цвет решённого судоку</string>
+    <string name="mseconds">мсек</string>
+    <string name="difficulty">Сложность</string>
+    <string name="difficulty_easy">Легкая</string>
+    <string name="difficulty_normal">Обычная</string>
+    <string name="difficulty_hard">Сложная</string>
+    <string name="try_again">Попробуй ещё!</string>
+    <string name="method_backtracking">Бэктрекинг</string>
+    <string name="method_propagation">Поэтапное исключение</string>
+    <string name="method_x">Алгоритм X</string>
+    <string name="settings_save">Сохранить</string>
+
+</resources>
