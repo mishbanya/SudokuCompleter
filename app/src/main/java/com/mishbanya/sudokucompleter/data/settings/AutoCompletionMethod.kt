@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 enum class AutoCompletionMethod {
     BACKTRACKING,
     CONSTRAINT_PROPAGATION,
-    HEURISTIC_BASED_SEARCH,
     DANCING_LINKS_X
 }

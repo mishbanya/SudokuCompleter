@@ -1,10 +1,10 @@
 package com.mishbanya.sudokucompleter.domain.sudoku.generator
 
-import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
-import com.mishbanya.sudokucompleter.data.Sudoku.deepCopy
+import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.data.sudoku.deepCopy
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,11 +50,7 @@ class SudokuGeneratorImpl @Inject constructor(
     }
 
     private fun removeNumbers(field: Array<Array<SudokuNode>>, difficulty: DifficultyLevel) {
-        val filledCells = when (difficulty) {
-            DifficultyLevel.EASY -> 40
-            DifficultyLevel.MEDIUM -> 30
-            DifficultyLevel.HARD -> 20
-        }
+        val filledCells = difficulty.toCellsCount()
         val positions = (0..80).shuffled().take(81 - filledCells)
         for (position in positions) {
             val row = position / 9

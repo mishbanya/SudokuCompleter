@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
 @Composable

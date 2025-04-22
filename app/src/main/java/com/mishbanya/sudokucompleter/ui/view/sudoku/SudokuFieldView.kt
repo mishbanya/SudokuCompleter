@@ -29,9 +29,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNode
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuNodeType
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
 import com.mishbanya.sudokucompleter.ui.theme.DeepBlue
 import com.mishbanya.sudokucompleter.ui.theme.SoftPink
 import com.mishbanya.sudokucompleter.ui.theme.Teal

@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.data.Sudoku
+package com.mishbanya.sudokucompleter.data.sudoku
 
 enum class DifficultyLevel {
     EASY,
@@ -10,6 +10,13 @@ enum class DifficultyLevel {
             EASY -> "E"
             MEDIUM -> "M"
             HARD -> "H"
+        }
+    }
+    fun toCellsCount(): Int {
+        return when (this) {
+            EASY -> 40
+            MEDIUM -> 35
+            HARD -> 30
         }
     }
     override fun toString(): String {

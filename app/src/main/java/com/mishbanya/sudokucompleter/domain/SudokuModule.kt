@@ -15,6 +15,8 @@ import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetterImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolver
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolverImpl
 import javax.inject.Singleton
@@ -45,8 +47,17 @@ object SudokuModule {
     fun provideXSolver(
 
     ): XAlgorithmSolver {
-        Log.d("Hilt", "Creating XSolver client instance")
+        Log.d("Hilt", "Creating XAlgorithmSolver client instance")
         return XAlgorithmSolverImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun providePropagationSolver(
+        sudokuValidityChecker: SudokuValidityChecker
+    ): ConstraintPropagationSolver {
+        Log.d("Hilt", "Creating ConstraintPropagationSolver client instance")
+        return ConstraintPropagationSolverImpl(sudokuValidityChecker)
     }
 
     @Provides

@@ -9,6 +9,6 @@ data class SettingsModel(
         automaticColor = 0xFF1E88E5,
         completedColor = 0xFFF48FB1
     ),
-    val autoCompletionMethod: AutoCompletionMethod = AutoCompletionMethod.BACKTRACKING,
+    val autoCompletionMethod: AutoCompletionMethod = AutoCompletionMethod.CONSTRAINT_PROPAGATION,
     val autoCompletionCooldown: Int = 1
 )

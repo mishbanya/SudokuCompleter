@@ -2,8 +2,8 @@ package com.mishbanya.sudokucompleter.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mishbanya.sudokucompleter.data.Sudoku.DifficultyLevel
-import com.mishbanya.sudokucompleter.data.Sudoku.SudokuField
+import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
+import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.settings.AutoCompletionMethod
 import com.mishbanya.sudokucompleter.data.settings.SettingsModel
 import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
@@ -11,6 +11,7 @@ import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGenerator
+import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +28,7 @@ class SudokuViewModel @Inject constructor(
     private val nodeSetter: NodeSetter,
     private val backtrackingSolver: BacktrackingSolver,
     private val xAlgorithmSolver: XAlgorithmSolver,
+    private val constraintPropagationSolver: ConstraintPropagationSolver,
     private val solvedObserver: SolvedObserver,
     private val settingsGetter: SettingsGetter
 ): ViewModel() {
@@ -81,8 +83,7 @@ class SudokuViewModel @Inject constructor(
             val result = _field.value?.let { initField ->
                 val solver = when(settings.autoCompletionMethod){
                     AutoCompletionMethod.BACKTRACKING -> backtrackingSolver
-                    AutoCompletionMethod.CONSTRAINT_PROPAGATION -> TODO()
-                    AutoCompletionMethod.HEURISTIC_BASED_SEARCH -> TODO()
+                    AutoCompletionMethod.CONSTRAINT_PROPAGATION -> constraintPropagationSolver
                     AutoCompletionMethod.DANCING_LINKS_X -> xAlgorithmSolver
                 }
                 solver.solve(
