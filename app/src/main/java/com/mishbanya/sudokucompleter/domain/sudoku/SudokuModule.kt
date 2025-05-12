@@ -1,26 +1,19 @@
-package com.mishbanya.sudokucompleter.domain
+package com.mishbanya.sudokucompleter.domain.sudoku
 
 import android.util.Log
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolver
-import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
-import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGenerator
-import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityChecker
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolverImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetterImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.generator.SudokuGeneratorImpl
-import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityCheckerImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolverImpl
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolverImpl
 import javax.inject.Singleton
-import kotlin.random.Random
 
 @Module
 @InstallIn(SingletonComponent::class)

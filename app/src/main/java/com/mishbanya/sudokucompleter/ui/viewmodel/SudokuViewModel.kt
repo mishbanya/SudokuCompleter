@@ -6,6 +6,7 @@ import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.settings.AutoCompletionMethod
 import com.mishbanya.sudokucompleter.data.settings.SettingsModel
+import com.mishbanya.sudokucompleter.domain.history.repository.HistoryWorker
 import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
@@ -30,7 +31,8 @@ class SudokuViewModel @Inject constructor(
     private val xAlgorithmSolver: XAlgorithmSolver,
     private val constraintPropagationSolver: ConstraintPropagationSolver,
     private val solvedObserver: SolvedObserver,
-    private val settingsGetter: SettingsGetter
+    private val settingsGetter: SettingsGetter,
+    private val historyWorker: HistoryWorker
 ): ViewModel() {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -57,6 +59,7 @@ class SudokuViewModel @Inject constructor(
         onGenerated: () -> Unit
     ) {
         scope.launch {
+            _field.value?.let { historyWorker.saveSudoku(it) }
             _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
             _isSolvedField.value = false
             onGenerated()

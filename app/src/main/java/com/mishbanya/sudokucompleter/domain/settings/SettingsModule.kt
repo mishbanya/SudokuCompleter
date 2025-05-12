@@ -5,7 +5,7 @@ import android.util.Log
 import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
 import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsSaver
 import com.mishbanya.sudokucompleter.domain.settings.repositoryImpl.SettingsGetterImpl
-import com.mishbanya.sudokucompleter.domain.settings.repositoryimpl.SettingsSaverImpl
+import com.mishbanya.sudokucompleter.domain.settings.repositoryImpl.SettingsSaverImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

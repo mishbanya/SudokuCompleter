@@ -1,4 +1,4 @@
-package com.mishbanya.sudokucompleter.domain.settings.repositoryimpl
+package com.mishbanya.sudokucompleter.domain.settings.repositoryImpl
 
 import android.content.SharedPreferences
 import com.mishbanya.sudokucompleter.data.common.CONSTANTS.SETTINGS_SP_KEY
