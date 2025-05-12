@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,13 +19,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,8 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mishbanya.sudokucompleter.R
 import com.mishbanya.sudokucompleter.data.settings.AutoCompletionMethod
 import com.mishbanya.sudokucompleter.ui.theme.*
@@ -50,9 +44,9 @@ import com.mishbanya.sudokucompleter.ui.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsView(
+    settingsViewModel: SettingsViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val settingsViewModel: SettingsViewModel = hiltViewModel()
     val settings by settingsViewModel.settingsModel.collectAsState()
 
     var manualColorField by remember { mutableStateOf(settings.colorSettingsModel.manualColor) }
@@ -63,6 +57,15 @@ fun SettingsView(
     var prematureGenerationField by remember { mutableStateOf(settings.prematureGeneration) }
 
     val autoCompletionCooldownError = autoCompletionCooldownField == null || autoCompletionCooldownField!! > 1000
+
+    val enableSaving =
+        !autoCompletionCooldownError &&
+        (manualColorField != settings.colorSettingsModel.manualColor ||
+        automaticColorField != settings.colorSettingsModel.automaticColor ||
+        completedColorField != settings.colorSettingsModel.completedColor||
+        autoCompletionMethodField != settings.autoCompletionMethod||
+        autoCompletionCooldownField != settings.autoCompletionCooldown||
+        prematureGenerationField != settings.prematureGeneration)
 
     val manualColorOptions = mutableMapOf(
         CoralRed.value to false,
@@ -116,7 +119,7 @@ fun SettingsView(
                     modifier = Modifier.size(40.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(color)),
                     shape = RoundedCornerShape(5.dp),
-                    border = if(chosen) BorderStroke(1.dp, Color.Yellow) else BorderStroke(1.dp, Color.Black)
+                    border = if(chosen) BorderStroke(1.dp, SunsetOrange) else BorderStroke(1.dp, Color.Black)
                 ) {}
             }
         }
@@ -139,7 +142,7 @@ fun SettingsView(
                     modifier = Modifier.size(40.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(color)),
                     shape = RoundedCornerShape(5.dp),
-                    border = if(chosen) BorderStroke(1.dp, Color.Yellow) else BorderStroke(1.dp, Color.Black)
+                    border = if(chosen) BorderStroke(1.dp, SunsetOrange) else BorderStroke(1.dp, Color.Black)
                 ) {}
             }
         }
@@ -162,7 +165,7 @@ fun SettingsView(
                     modifier = Modifier.size(40.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(color)),
                     shape = RoundedCornerShape(5.dp),
-                    border = if(chosen) BorderStroke(1.dp, Color.Yellow) else BorderStroke(1.dp, Color.Black)
+                    border = if(chosen) BorderStroke(1.dp, SunsetOrange) else BorderStroke(1.dp, Color.Black)
                 ) {}
             }
         }
@@ -187,7 +190,7 @@ fun SettingsView(
                         .border(
                             width = 2.dp,
                             color = if(autoCompletionMethodField == method)
-                                Color.Yellow
+                                SunsetOrange
                             else
                                 Color.Black,
                             shape = RoundedCornerShape(5.dp)
@@ -255,7 +258,8 @@ fun SettingsView(
                 )
             },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(5.dp)
+            shape = RoundedCornerShape(5.dp),
+            enabled = enableSaving
         ) {
             Text(stringResource(R.string.settings_save))
         }

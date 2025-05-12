@@ -5,6 +5,7 @@ import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
 import com.mishbanya.sudokucompleter.data.sudoku.deepCopy
+import com.mishbanya.sudokucompleter.domain.sudoku.SudokuValidityChecker
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.ConstraintPropagationSolver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SudokuGeneratorImpl @Inject constructor(
-    private val constraintPropagationSolver: ConstraintPropagationSolver
+    private val constraintPropagationSolver: ConstraintPropagationSolver,
+    private val sudokuValidityChecker: SudokuValidityChecker
 ) : SudokuGenerator {
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -22,7 +24,13 @@ class SudokuGeneratorImpl @Inject constructor(
             do {
                 field = generateCompletedSudoku()
                 removeNumbers(field, difficulty)
-            } while (!hasUniqueSolution(field.deepCopy()))
+            } while (!
+                constraintPropagationSolver.solve(
+                    SudokuField(field.deepCopy(), DifficultyLevel.MEDIUM),
+                    {},
+                    0
+                )
+            )
 
             return@withContext SudokuField(field, difficulty)
         }
@@ -36,7 +44,7 @@ class SudokuGeneratorImpl @Inject constructor(
 
             val values = (1..9).shuffled()
             for (value in values) {
-                if (isValidMove(field, row, col, value)) {
+                if (sudokuValidityChecker.isValidMove(field, row, col, value)) {
                     field[row][col] = SudokuNode(value, SudokuNodeType.Initial)
                     if (fill(row, col + 1)) return true
                     field[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
@@ -57,18 +65,5 @@ class SudokuGeneratorImpl @Inject constructor(
             val col = position % 9
             field[row][col] = SudokuNode(null, SudokuNodeType.Unfilled)
         }
-    }
-
-    private suspend fun hasUniqueSolution(field: Array<Array<SudokuNode>>): Boolean {
-        return constraintPropagationSolver.solve(
-            SudokuField(field, DifficultyLevel.MEDIUM),
-            {},
-            0
-        )
-    }
-
-    private fun isValidMove(field: Array<Array<SudokuNode>>, row: Int, col: Int, num: Int): Boolean {
-        return (0 until 9).none { field[row][it].value == num || field[it][col].value == num } &&
-                (0 until 3).none { r -> (0 until 3).any { c -> field[row / 3 * 3 + r][col / 3 * 3 + c].value == num } }
     }
 }

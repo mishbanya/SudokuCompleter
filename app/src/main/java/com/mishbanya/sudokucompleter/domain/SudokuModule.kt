@@ -73,10 +73,12 @@ object SudokuModule {
     @Singleton
     fun provideSudokuGenerator(
         constraintPropagationSolver: ConstraintPropagationSolver,
+        sudokuValidityChecker: SudokuValidityChecker,
     ): SudokuGenerator {
         Log.d("Hilt", "Creating SudokuGenerator client instance")
         return SudokuGeneratorImpl(
             constraintPropagationSolver,
+            sudokuValidityChecker
         )
     }
 

@@ -36,9 +36,9 @@ import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
 
 @Composable
 fun SudokuView(
+    sudokuViewModel: SudokuViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val sudokuViewModel: SudokuViewModel = hiltViewModel()
     val field = sudokuViewModel.field.collectAsState()
     var solvingState by remember { mutableStateOf(false) }
 
