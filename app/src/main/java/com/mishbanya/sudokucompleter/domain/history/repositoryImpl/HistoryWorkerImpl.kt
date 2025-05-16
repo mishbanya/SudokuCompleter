@@ -41,7 +41,7 @@ class HistoryWorkerImpl(
     override fun getHistory(from: Int, to: Int): List<SudokuField> {
         if (to <= from) return emptyList()
         return try {
-            (from until to).mapNotNull { i ->
+            (getHistorySize()-from downTo   getHistorySize()-to).mapNotNull { i ->
                 sharedPreferences.getString("$historyKey$i", null)?.let {
                     Json.decodeFromString<SudokuField>(it)
                 }

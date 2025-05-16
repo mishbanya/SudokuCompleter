@@ -1,6 +1,5 @@
-package com.mishbanya.sudokucompleter.ui.view.sudoku
+package com.mishbanya.sudokucompleter.ui.view.history
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,30 +30,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mishbanya.sudokucompleter.R
+import com.mishbanya.sudokucompleter.data.settings.ColorSettingsModel
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNode
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuNodeType
-import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
+import com.mishbanya.sudokucompleter.ui.viewmodel.HistoryViewModel
 
 @Composable
-fun SudokuFieldView(
+fun SudokuMainFieldView(
     sudokuField: SudokuField,
-    sudokuViewModel: SudokuViewModel,
+    historyViewModel: HistoryViewModel,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
+    val settings by historyViewModel.settings.collectAsState()
+    val colorSettingsModel = settings.colorSettingsModel
+    val isSolved = historyViewModel.checkIsSolved(sudokuField)
     Text("${stringResource(R.string.difficulty)}: ${sudokuField.difficultyLevel.toStringRes()}")
     sudokuField.field.forEachIndexed { index, row ->
-        val tryAgainText = stringResource(R.string.try_again)
         SudokuRowView(
             row = row,
             index = index,
-            sudokuViewModel = sudokuViewModel,
-            onChanged = { col, value ->
-                if(!sudokuViewModel.setNode(index,col,value)){
-                    Toast.makeText(context, tryAgainText, Toast.LENGTH_SHORT).show()
-                }
-            },
+            colorSettingsModel = colorSettingsModel,
+            isSolved = isSolved,
             modifier = modifier.padding(vertical = 2.dp)
         )
     }
@@ -64,8 +61,8 @@ fun SudokuFieldView(
 fun SudokuRowView(
     row: Array<SudokuNode>,
     index: Int,
-    sudokuViewModel: SudokuViewModel,
-    onChanged: (col:Int, value: Int?) -> Unit,
+    colorSettingsModel: ColorSettingsModel,
+    isSolved: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -78,10 +75,8 @@ fun SudokuRowView(
             SudokuCellView(
                 cell = cell,
                 index = index,
-                sudokuViewModel = sudokuViewModel,
-                onChanged = {
-                    onChanged(index, it)
-                },
+                colorSettingsModel = colorSettingsModel,
+                isSolved = isSolved,
                 modifier = modifier.padding(horizontal = 2.dp))
         }
     }
@@ -94,12 +89,10 @@ fun SudokuRowView(
 fun SudokuCellView(
     cell: SudokuNode,
     index: Int,
-    sudokuViewModel: SudokuViewModel,
-    onChanged: (value: Int?) -> Unit,
+    colorSettingsModel: ColorSettingsModel,
+    isSolved: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val isSolved = sudokuViewModel.isSolvedField.collectAsState()
-    val colorSettingsModel = sudokuViewModel.settings.colorSettingsModel
 
     Box(
         modifier = modifier
@@ -114,17 +107,12 @@ fun SudokuCellView(
     ) {
         BasicTextField(
             value = cell.value?.toString() ?: "",
-            onValueChange = { newValue ->
-                if (newValue.isEmpty()) {
-                    onChanged(null)
-                } else if (newValue.length == 1 && newValue.all { it.isDigit() } && newValue.toInt() in 1..9) {
-                    onChanged(newValue.toInt())
-                }
-            },
+            onValueChange = {},
+            readOnly = true,
             textStyle = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isSolved.value)
+                color = if (isSolved)
                     Color(colorSettingsModel.completedColor)
                 else {
                     when(cell.flag){

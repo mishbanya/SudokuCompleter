@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mishbanya.sudokucompleter.R
 import com.mishbanya.sudokucompleter.data.sudoku.DifficultyLevel
 import com.mishbanya.sudokucompleter.ui.viewmodel.SudokuViewModel
@@ -42,6 +42,10 @@ fun SudokuView(
     val field = sudokuViewModel.field.collectAsState()
     var solvingState by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        sudokuViewModel.getSettings()
+    }
+
     if(field.value == null){
         Box(
             modifier = modifier
@@ -49,7 +53,7 @@ fun SudokuView(
                 .padding(top = 16.dp)
         ) {
             SudokuGeneratorComponent(
-                modifier = modifier.align(Alignment.Center),
+                modifier = Modifier.align(Alignment.Center),
                 sudokuViewModel = sudokuViewModel
             )
         }
@@ -66,17 +70,17 @@ fun SudokuView(
 
             SudokuGeneratorComponent(
                 sudokuViewModel = sudokuViewModel,
-                modifier = modifier
+                modifier = Modifier
                     .align(Alignment.CenterHorizontally),
                 enabled = !solvingState
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            SudokuFieldView(
+            SudokuMainFieldView(
                 sudokuField = field.value!!,
                 sudokuViewModel = sudokuViewModel,
-                modifier = modifier
+                modifier = Modifier
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -90,7 +94,7 @@ fun SudokuView(
                         }
                     )
                 },
-                modifier = modifier
+                modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth(0.5f),
                 enabled = !solvingState

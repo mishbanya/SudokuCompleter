@@ -7,7 +7,7 @@ import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.data.settings.AutoCompletionMethod
 import com.mishbanya.sudokucompleter.data.settings.SettingsModel
 import com.mishbanya.sudokucompleter.domain.history.repository.HistoryWorker
-import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
+import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsWorker
 import com.mishbanya.sudokucompleter.domain.sudoku.solvers.BacktrackingSolver
 import com.mishbanya.sudokucompleter.domain.sudoku.NodeSetter
 import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
@@ -31,7 +31,7 @@ class SudokuViewModel @Inject constructor(
     private val xAlgorithmSolver: XAlgorithmSolver,
     private val constraintPropagationSolver: ConstraintPropagationSolver,
     private val solvedObserver: SolvedObserver,
-    private val settingsGetter: SettingsGetter,
+    private val settingsWorker: SettingsWorker,
     private val historyWorker: HistoryWorker
 ): ViewModel() {
 
@@ -49,7 +49,17 @@ class SudokuViewModel @Inject constructor(
     val isSolvedField: StateFlow<Boolean>
         get() = _isSolvedField.asStateFlow()
 
-    val settings = settingsGetter.getFromSharedPreferences() ?: SettingsModel()
+    private val _settings: MutableStateFlow<SettingsModel> = MutableStateFlow(SettingsModel())
+    val settings: StateFlow<SettingsModel>
+        get() = _settings.asStateFlow()
+
+    fun getSettings(){
+        scope.launch {
+            _settings.emit(
+                settingsWorker.getFromSharedPreferences() ?: SettingsModel()
+            )
+        }
+    }
 
     fun setDifficulty(difficulty: DifficultyLevel){
         _difficulty.value = difficulty
@@ -86,7 +96,7 @@ class SudokuViewModel @Inject constructor(
     ) {
         scope.launch {
             val result = _field.value?.let { initField ->
-                val solver = when(settings.autoCompletionMethod){
+                val solver = when(settings.value.autoCompletionMethod){
                     AutoCompletionMethod.BACKTRACKING -> backtrackingSolver
                     AutoCompletionMethod.CONSTRAINT_PROPAGATION -> constraintPropagationSolver
                     AutoCompletionMethod.DANCING_LINKS_X -> xAlgorithmSolver
@@ -96,7 +106,7 @@ class SudokuViewModel @Inject constructor(
                     onUpdate = { updatedField ->
                         viewModelScope.launch { _field.value = updatedField }
                     },
-                    cooldown = settings.autoCompletionCooldown
+                    cooldown = settings.value.autoCompletionCooldown
                 )
             }
             onSolved(result ?: false)

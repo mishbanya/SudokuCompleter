@@ -20,5 +20,7 @@
     <string name="method_propagation">Поэтапное исключение</string>
     <string name="method_x">Алгоритм X</string>
     <string name="settings_save">Сохранить</string>
+    <string name="history_load_more">Загрузить еще</string>
+    <string name="history_clear">Очистить историю</string>
 
 </resources>

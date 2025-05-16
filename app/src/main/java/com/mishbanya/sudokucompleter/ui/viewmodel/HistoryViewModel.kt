@@ -1,8 +1,11 @@
 package com.mishbanya.sudokucompleter.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.mishbanya.sudokucompleter.data.settings.SettingsModel
 import com.mishbanya.sudokucompleter.data.sudoku.SudokuField
 import com.mishbanya.sudokucompleter.domain.history.repository.HistoryWorker
+import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsWorker
+import com.mishbanya.sudokucompleter.domain.sudoku.SolvedObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +18,9 @@ import kotlin.math.min
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    private val historyWorker: HistoryWorker
+    private val historyWorker: HistoryWorker,
+    private val solvedObserver: SolvedObserver,
+    private val settingsWorker: SettingsWorker
 ): ViewModel() {
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -27,24 +32,46 @@ class HistoryViewModel @Inject constructor(
     val isExpandable: StateFlow<Boolean>
         get() = _isExpandable.asStateFlow()
 
+    private val _settings: MutableStateFlow<SettingsModel> = MutableStateFlow(SettingsModel())
+    val settings: StateFlow<SettingsModel>
+        get() = _settings.asStateFlow()
+
     fun clearHistory(){
         historyWorker.clearHistory()
+        initHistory()
+    }
+
+    fun getSettings(){
+        scope.launch {
+            _settings.emit(
+                settingsWorker.getFromSharedPreferences() ?: SettingsModel()
+            )
+        }
+    }
+
+    fun initHistory(){
+        scope.launch {
+            _history.emit(
+                emptyList()
+            )
+            expandHistory()
+        }
+    }
+
+    fun checkIsSolved(sudokuField: SudokuField): Boolean{
+        return solvedObserver.checkSolvedState(sudokuField)
     }
 
     fun expandHistory(){
         val currentSize = _history.value.size
-        val limit = min(_history.value.size+5,historyWorker.getHistorySize()-1)
+        val limit = min(_history.value.size+3,historyWorker.getHistorySize())
         scope.launch {
             _history.emit(
-                historyWorker.getHistory(currentSize,limit)
+                _history.value + historyWorker.getHistory(currentSize,limit)
             )
             _isExpandable.emit(
-                limit != historyWorker.getHistorySize()-1
+                limit != historyWorker.getHistorySize()
             )
         }
-    }
-    
-    init {
-        expandHistory()
     }
 }

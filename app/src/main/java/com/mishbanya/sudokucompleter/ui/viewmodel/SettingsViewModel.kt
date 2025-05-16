@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.mishbanya.sudokucompleter.data.settings.AutoCompletionMethod
 import com.mishbanya.sudokucompleter.data.settings.ColorSettingsModel
 import com.mishbanya.sudokucompleter.data.settings.SettingsModel
-import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsGetter
-import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsSaver
+import com.mishbanya.sudokucompleter.domain.settings.repository.SettingsWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsSaver: SettingsSaver,
-    private val settingsGetter: SettingsGetter
+    private val settingsWorker: SettingsWorker
 ): ViewModel() {
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -51,12 +49,12 @@ class SettingsViewModel @Inject constructor(
                     prematureGeneration = prematureGeneration?: settingsModel.value.prematureGeneration
                 )
             )
-            settingsSaver.saveInSharedPreferences(_settingsModel.value)
+            settingsWorker.saveInSharedPreferences(_settingsModel.value)
         }
     }
 
     private fun getSettings(): Boolean{
-        settingsGetter.getFromSharedPreferences()?.let {
+        settingsWorker.getFromSharedPreferences()?.let {
             _settingsModel.value = it
             return true
         } ?: return false
