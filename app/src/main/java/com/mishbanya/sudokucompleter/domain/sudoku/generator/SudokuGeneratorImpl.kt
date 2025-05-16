@@ -18,7 +18,7 @@ class SudokuGeneratorImpl @Inject constructor(
 ) : SudokuGenerator {
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    override suspend fun generateInitialSudoku(difficulty: DifficultyLevel): SudokuField =
+    override suspend fun generateSudoku(difficulty: DifficultyLevel): SudokuField =
         withContext(scope.coroutineContext) {
             var field: Array<Array<SudokuNode>>
             do {

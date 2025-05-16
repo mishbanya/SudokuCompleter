@@ -21,5 +21,6 @@
     <string name="settings_save">Save</string>
     <string name="history_load_more">Load more</string>
     <string name="history_clear">Clear history</string>
+    <string name="history_no_history">Нет истории</string>
 
 </resources>

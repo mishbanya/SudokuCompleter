@@ -17,10 +17,12 @@ import com.mishbanya.sudokucompleter.domain.sudoku.solvers.XAlgorithmSolver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Stack
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,6 +55,17 @@ class SudokuViewModel @Inject constructor(
     val settings: StateFlow<SettingsModel>
         get() = _settings.asStateFlow()
 
+    private val fastFieldStack = Stack<SudokuField>()
+
+    private fun regenStacks(){
+        fastFieldStack.clear()
+        scope.launch {
+            while (fastFieldStack.size<3){
+                fastFieldStack.push(sudokuGenerator.generateSudoku(_difficulty.value))
+            }
+        }
+    }
+
     fun getSettings(){
         scope.launch {
             _settings.emit(
@@ -68,11 +81,22 @@ class SudokuViewModel @Inject constructor(
     fun generateSudoku(
         onGenerated: () -> Unit
     ) {
-        scope.launch {
+        if(settings.value.prematureGeneration){
             _field.value?.let { historyWorker.saveSudoku(it) }
-            _field.value = sudokuGenerator.generateInitialSudoku(difficulty = _difficulty.value)
-            _isSolvedField.value = false
-            onGenerated()
+            scope.launch {
+                while (fastFieldStack.isEmpty()) delay(10L)
+                _field.value = fastFieldStack.pop()
+                _isSolvedField.value = false
+                onGenerated()
+                fastFieldStack.push(sudokuGenerator.generateSudoku(_difficulty.value))
+            }
+        }else{
+            scope.launch {
+                _field.value?.let { historyWorker.saveSudoku(it) }
+                _field.value = sudokuGenerator.generateSudoku(_difficulty.value)
+                _isSolvedField.value = false
+                onGenerated()
+            }
         }
     }
 
@@ -112,5 +136,9 @@ class SudokuViewModel @Inject constructor(
             onSolved(result ?: false)
             _isSolvedField.value = result ?: false
         }
+    }
+
+    init {
+        regenStacks()
     }
 }
